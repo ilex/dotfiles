@@ -19,13 +19,26 @@ Plug 'ctrlpvim/ctrlp.vim'                   " Fuzzy finder
 Plug 'dyng/ctrlsf.vim'                      " Fuzzy search 
 Plug 'tpope/vim-commentary'                 " Comment out
 Plug 'tpope/vim-surround'                   " Surround with s
-Plug 'maralla/validator.vim'                " Code validation
+" Plug 'maralla/validator.vim'                " Code validation
+Plug 'w0rp/ale'                             " Code validation
 " Git
 Plug 'airblade/vim-gitgutter'               " Remove/modify/new line signs for git
 Plug 'xuyuanp/nerdtree-git-plugin'          " Git changes in tree
 Plug 'tpope/vim-fugitive'                   " Git commands
+" Snippets
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
 " Html 
 Plug 'rstacruz/sparkup'                     " expand html from css like syntax
+" Autocomplete
+Plug 'prabirshrestha/asyncomplete.vim'
+Plug 'prabirshrestha/async.vim'
+Plug 'prabirshrestha/vim-lsp', { 'branch': 'dev' }
+Plug 'prabirshrestha/asyncomplete-lsp.vim'
+Plug 'prabirshrestha/asyncomplete-ultisnips.vim'
+Plug 'prabirshrestha/asyncomplete-buffer.vim'
+" Vim
+Plug 'junegunn/vader.vim'                   " vim test framework
 call plug#end()
 " }}}
 
@@ -39,17 +52,43 @@ call plug#end()
     set laststatus=2
 " }}}
 
-" Completer {{{
-    let g:validator_permanent_sign = 1
+" Autocomplete {{{
+    " Python 
+    if executable('pyls')
+        " pip install python-language-server
+        au User lsp_setup call lsp#register_server({
+            \ 'name': 'pyls',
+            \ 'cmd': {server_info->['pyls']},
+            \ 'whitelist': ['python'],
+            \ })
+    endif
+    " Snippets
+    call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
+        \ 'name': 'ultisnips',
+        \ 'whitelist': ['*'],
+        \ 'completor': function('asyncomplete#sources#ultisnips#completor'),
+        \ }))
+    " Buffer
+    call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
+        \ 'name': 'buffer',
+        \ 'whitelist': ['*'],
+        \ 'blacklist': ['go'],
+        \ 'completor': function('asyncomplete#sources#buffer#completor'),
+        \ })) 
+    " Use Tab to navigate    
+    inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+    inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
 " }}}
- 
-" Gitgutter {{{
-if exists('&signcolumn')  " Vim 7.4.2201
-  set signcolumn=yes
-else
-  let g:gitgutter_sign_column_always = 1
-endif
+
+" Ale {{{
+    let g:airline#extensions#ale#enabled = 1
 " }}}
+
+" Snippets {{{
+    let g:UltiSnipsExpandTrigger="<c-e>"
+" }}}
+
 " }}}
 
 " Keys mapping {{{
@@ -63,10 +102,15 @@ endif
     nnoremap k gk
     " map ESC to jj
     imap jj <Esc>
-    " open file tree manager with F2
+    " toggle file tree manager with F2
     map <F2> :NERDTreeToggle<CR>
-    " open tags manager with F3
+    " toggle tags manager with F3
     map <F3> :TagbarToggle<CR>
+    " fold/unfold
+    nnoremap <space> za
+    " ale go to next/previous error or warning
+    nmap <silent> [e <Plug>(ale_previous_wrap)
+    nmap <silent> ]e <Plug>(ale_next_wrap)
 " }}}
 
 " Leader Shortcuts {{{
@@ -80,6 +124,7 @@ map <leader>x :q<CR>
 " quit all
 map <leader>q :qa<CR>
 " }}}
+
 " Settings {{{
 
 " Colors {{{
@@ -116,7 +161,7 @@ set autoindent
 set number              " show line numbers
 set showcmd             " show command in bottom bar
 set cursorline          " highlight current line
-set showmatch           " higlight matching parenthesis
+set showmatch           " highlight matching parenthesis
 set scrolloff=3         " when scrolling, keep cursor 3 lines away from screen border
 set wildmenu              " autocompletion of files and commands behaves like shell
 set wildmode=list:longest " (complete only the common part, list the options that match)
@@ -132,7 +177,6 @@ set incsearch           " search as characters are entered
 set foldmethod=indent   " fold based on indent level
 set foldnestmax=10      " max 10 depth
 set foldenable          " don't fold files by default on open
-" nnoremap <space> za
 set foldlevelstart=10    " start with fold level of 1
 " }}}
 " }}}
@@ -143,5 +187,10 @@ augroup config_group
     autocmd VimEnter * highlight clear SignColumn
     autocmd FileType vim setlocal foldmethod=marker 
     autocmd BufRead .vimrc setlocal foldlevel=0 
+augroup END
+
+augroup python_group
+    autocmd!
+    autocmd FileType python setlocal signcolumn=yes
 augroup END
 " }}}
