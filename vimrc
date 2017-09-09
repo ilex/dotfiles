@@ -21,6 +21,7 @@ Plug 'tpope/vim-commentary'                 " Comment out
 Plug 'tpope/vim-surround'                   " Surround with s
 " Plug 'maralla/validator.vim'                " Code validation
 Plug 'w0rp/ale'                             " Code validation
+Plug 'Raimondi/delimitMate'                 " Auto close quotes, parenthesis, brackets, etc.
 " Git
 Plug 'airblade/vim-gitgutter'               " Remove/modify/new line signs for git
 Plug 'xuyuanp/nerdtree-git-plugin'          " Git changes in tree
@@ -33,12 +34,19 @@ Plug 'rstacruz/sparkup'                     " expand html from css like syntax
 " Autocomplete
 Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'prabirshrestha/async.vim'
-Plug 'prabirshrestha/vim-lsp', { 'branch': 'dev' }
+Plug 'prabirshrestha/vim-lsp'
 Plug 'prabirshrestha/asyncomplete-lsp.vim'
 Plug 'prabirshrestha/asyncomplete-ultisnips.vim'
 Plug 'prabirshrestha/asyncomplete-buffer.vim'
 " Vim
+" Plug 'pseewald/vim-anyfold'                 " Fold code blocks with za, ..., move with ]], etc
 Plug 'junegunn/vader.vim'                   " vim test framework
+" Python
+Plug 'Vimjas/vim-python-pep8-indent'        " Indent python code
+Plug 'vim-python/python-syntax'             " highlight python code
+Plug 'tmhedberg/SimpylFold'                 " Properly fold python code
+" Jinja2
+Plug 'Glench/Vim-Jinja2-Syntax'
 call plug#end()
 " }}}
 
@@ -49,6 +57,10 @@ call plug#end()
     let g:airline#extensions#tabline#left_sep = ' '
     let g:airline#extensions#tabline#left_alt_sep = '|'
     let g:airline#extensions#branch#format = 2
+    " hide spell
+    let g:airline_detect_spell=0
+    " hide encoding
+    let g:airline_section_y=''
     set laststatus=2
 " }}}
 
@@ -59,6 +71,7 @@ call plug#end()
         au User lsp_setup call lsp#register_server({
             \ 'name': 'pyls',
             \ 'cmd': {server_info->['pyls']},
+            \ 'priority': 3,
             \ 'whitelist': ['python'],
             \ })
     endif
@@ -66,6 +79,7 @@ call plug#end()
     call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
         \ 'name': 'ultisnips',
         \ 'whitelist': ['*'],
+        \ 'priority': 1,
         \ 'completor': function('asyncomplete#sources#ultisnips#completor'),
         \ }))
     " Buffer
@@ -73,6 +87,7 @@ call plug#end()
         \ 'name': 'buffer',
         \ 'whitelist': ['*'],
         \ 'blacklist': ['go'],
+        \ 'priority': 2,
         \ 'completor': function('asyncomplete#sources#buffer#completor'),
         \ })) 
     " Use Tab to navigate    
@@ -83,12 +98,29 @@ call plug#end()
 
 " Ale {{{
     let g:airline#extensions#ale#enabled = 1
+    let g:ale_lint_delay = 1000
 " }}}
 
 " Snippets {{{
     let g:UltiSnipsExpandTrigger="<c-e>"
 " }}}
 
+" Python syntax {{{
+let g:python_highlight_all = 1
+" }}}
+
+" Git {{{
+" turn off git signs
+let g:gitgutter_enabled = 0
+" }}}
+
+" NERDTree {{{
+    let NERDTreeIgnore = ['\.pyc$', '\.pyo$', '^__pycache__', 'build', 'venv', 'egg', 'egg-info/', 'dist']
+" }}}
+
+" CtrlP {{{
+    let g:ctrlp_custom_ignore = '\vbuild/|dist/|venv/|target/|\.git/\.(o|swp|pyc|egg)$'
+" }}}
 " }}}
 
 " Keys mapping {{{
@@ -187,10 +219,44 @@ augroup config_group
     autocmd VimEnter * highlight clear SignColumn
     autocmd FileType vim setlocal foldmethod=marker 
     autocmd BufRead .vimrc setlocal foldlevel=0 
+    autocmd BufWritePre *.php,*.js,*.txt,*.hs,*.java,*.md,*.rb,*.css,*.jinja2,*.html :call <SID>StripTrailingWhitespaces()
 augroup END
 
 augroup python_group
     autocmd!
     autocmd FileType python setlocal signcolumn=yes
 augroup END
+
+augroup jinja2_group
+    autocmd!
+    autocmd BufNewFile,BufRead *.html,*.jinja2 setlocal filetype=jinja
+    autocmd FileType jinja setlocal autoindent smartindent ts=2 sts=2 sw=2 expandtab
+augroup END
+
+augroup yaml_group
+    autocmd!
+    autocmd FileType yaml setlocal autoindent smartindent ts=2 sts=2 sw=2 expandtab
+augroup END
+
+" }}}
+
+" Commands {{{
+" save as sudo
+ca w!! w !sudo tee "%"
+" }}} 
+
+" Custom functions {{{
+
+" strips trailing whitespace at the end of files. this
+" is called on buffer write in the autogroup above.
+function! <SID>StripTrailingWhitespaces()
+    " save last search & cursor position
+    let _s=@/
+    let l = line(".")
+    let c = col(".")
+    %s/\s\+$//e
+    let @/=_s
+    call cursor(l, c)
+endfunction
+
 " }}}
