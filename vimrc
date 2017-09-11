@@ -219,12 +219,13 @@ augroup config_group
     autocmd VimEnter * highlight clear SignColumn
     autocmd FileType vim setlocal foldmethod=marker 
     autocmd BufRead .vimrc setlocal foldlevel=0 
-    autocmd BufWritePre *.php,*.js,*.txt,*.hs,*.java,*.md,*.rb,*.css,*.jinja2,*.html :call <SID>StripTrailingWhitespaces()
+    autocmd BufWritePre *.py,*.php,*.js,*.txt,*.hs,*.java,*.md,*.rb,*.css,*.jinja2,*.html :call <SID>StripTrailingWhitespaces()
 augroup END
 
 augroup python_group
     autocmd!
     autocmd FileType python setlocal signcolumn=yes
+    " autocmd InsertLeave *.py :call <SID>StripTrailingWhitespaces()
 augroup END
 
 augroup jinja2_group
