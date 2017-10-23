@@ -20,8 +20,12 @@ Plug 'dyng/ctrlsf.vim'                      " Fuzzy search
 Plug 'tpope/vim-commentary'                 " Comment out
 Plug 'tpope/vim-surround'                   " Surround with s
 " Plug 'maralla/validator.vim'                " Code validation
+" Plug 'https://github.com/idanarye/vim-vebugger'   -- consider to use
 Plug 'w0rp/ale'                             " Code validation
 Plug 'Raimondi/delimitMate'                 " Auto close quotes, parenthesis, brackets, etc.
+Plug 'gko/vim-coloresque'
+" Plug 'shmargum/vim-sass-colors'             " Show colors in css, sass
+
 " Git
 Plug 'airblade/vim-gitgutter'               " Remove/modify/new line signs for git
 Plug 'xuyuanp/nerdtree-git-plugin'          " Git changes in tree
@@ -65,6 +69,8 @@ call plug#end()
 " }}}
 
 " Autocomplete {{{
+    set completeopt=menuone,menu,longest,preview
+    let g:asyncomplete_remove_duplicates = 1
     " Python 
     if executable('pyls')
         " pip install python-language-server
@@ -203,6 +209,8 @@ set wildmode=list:longest " (complete only the common part, list the options tha
 set ignorecase          " ignore case when searching
 set incsearch           " search as characters are entered
 " set hlsearch            " highlight all matches
+noremap <leader>h :set hlsearch!<CR>
+nnoremap / :set hlsearch<CR>/
 " }}}
 
 " Folding {{{
@@ -239,6 +247,10 @@ augroup yaml_group
     autocmd FileType yaml setlocal autoindent smartindent ts=2 sts=2 sw=2 expandtab
 augroup END
 
+augroup sass_group
+    autocmd!
+    autocmd FileType scss setlocal autoindent smartindent ts=2 sts=2 sw=2 expandtab
+augroup END
 " }}}
 
 " Commands {{{
