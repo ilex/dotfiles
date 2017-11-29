@@ -42,6 +42,7 @@ Plug 'prabirshrestha/vim-lsp'
 Plug 'prabirshrestha/asyncomplete-lsp.vim'
 Plug 'prabirshrestha/asyncomplete-ultisnips.vim'
 Plug 'prabirshrestha/asyncomplete-buffer.vim'
+Plug 'felixfbecker/php-language-server', {'do': 'composer install && composer run-script parse-stubs'}
 " Vim
 " Plug 'pseewald/vim-anyfold'                 " Fold code blocks with za, ..., move with ]], etc
 Plug 'junegunn/vader.vim'                   " vim test framework
@@ -96,6 +97,12 @@ call plug#end()
         \ 'priority': 2,
         \ 'completor': function('asyncomplete#sources#buffer#completor'),
         \ })) 
+    " php
+    au User lsp_setup call lsp#register_server({                                    
+        \ 'name': 'php-language-server',                                            
+        \ 'cmd': {server_info->['php', expand('~/.vim/plugged/php-language-server/bin/php-language-server.php')]},
+        \ 'whitelist': ['php'],                                                     
+        \ })
     " Use Tab to navigate    
     inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
     inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
@@ -234,6 +241,7 @@ augroup python_group
     autocmd!
     autocmd FileType python setlocal signcolumn=yes
     " autocmd InsertLeave *.py :call <SID>StripTrailingWhitespaces()
+    autocmd FileType python map <silent> <leader>b oimport pdb; pdb.set_trace()<esc>
 augroup END
 
 augroup jinja2_group
