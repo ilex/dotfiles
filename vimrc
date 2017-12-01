@@ -9,9 +9,10 @@ call plug#begin()
 " Theme
 Plug 'altercation/vim-colors-solarized'
 " Status line and tab line
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'Lokaltog/powerline'                   " Powerline fonts plugin
+" Plug 'vim-airline/vim-airline'
+" Plug 'vim-airline/vim-airline-themes'
+" Plug 'Lokaltog/powerline'                   " Powerline fonts plugin
+Plug 'itchyny/lightline.vim'                " Light status line
 " Tools
 Plug 'scrooloose/nerdtree'                  " Tree file manager
 Plug 'majutsushi/tagbar'                    " Modules/classes/methods manager
@@ -23,7 +24,8 @@ Plug 'tpope/vim-surround'                   " Surround with s
 " Plug 'https://github.com/idanarye/vim-vebugger'   -- consider to use
 Plug 'w0rp/ale'                             " Code validation
 Plug 'Raimondi/delimitMate'                 " Auto close quotes, parenthesis, brackets, etc.
-Plug 'gko/vim-coloresque'
+Plug 'Yggdroot/indentLine'                  " Vertical lines on identations
+Plug 'gko/vim-coloresque'                   " Colorize colors in css 
 " Plug 'shmargum/vim-sass-colors'             " Show colors in css, sass
 
 " Git
@@ -35,6 +37,7 @@ Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 " Html 
 Plug 'rstacruz/sparkup'                     " expand html from css like syntax
+Plug 'valloric/matchtagalways'              " match html tags
 " Autocomplete
 Plug 'prabirshrestha/asyncomplete.vim'
 Plug 'prabirshrestha/async.vim'
@@ -52,22 +55,25 @@ Plug 'vim-python/python-syntax'             " highlight python code
 Plug 'tmhedberg/SimpylFold'                 " Properly fold python code
 " Jinja2
 Plug 'Glench/Vim-Jinja2-Syntax'
+" PHP
+Plug 'StanAngeloff/php.vim'                 " Php syntax (try)
+Plug 'tobyS/pdv'                            " Php documenter (try)
 call plug#end()
 " }}}
 
 " Plugins Options {{{
 
 " Airline {{{
-    let g:airline_powerline_fonts = 1
-    let g:airline#extensions#tabline#left_sep = ' '
-    let g:airline#extensions#tabline#left_alt_sep = '|'
-    let g:airline#extensions#branch#format = 2
-    " hide spell
-    let g:airline_detect_spell=0
-    " hide encoding
-    let g:airline_section_y=''
-    set laststatus=2
-" }}}
+    " let g:airline_powerline_fonts = 1
+    " let g:airline#extensions#tabline#left_sep = ' '
+    " let g:airline#extensions#tabline#left_alt_sep = '|'
+    " let g:airline#extensions#branch#format = 2
+    " " hide spell
+    " let g:airline_detect_spell=0
+    " " hide encoding
+    " let g:airline_section_y=''
+    " set laststatus=2
+" " }}}
 
 " Autocomplete {{{
     set completeopt=menuone,menu,longest,preview
@@ -161,13 +167,17 @@ let g:gitgutter_enabled = 0
 " Leader Shortcuts {{{
 let mapleader=","
 " paste from external buffer
-map <Leader>p "*p
+" map <Leader>p "*p
 " save file
 map <leader>w :w<CR>
 " quit file
 map <leader>x :q<CR>
 " quit all
 map <leader>q :qa<CR>
+" Yank and put helpers. (try)
+noremap <leader>y        :let @0=getreg('*')<CR>
+noremap <leader>p        "0]p
+noremap <leader>P        "0]P'
 " }}}
 
 " Settings {{{
@@ -210,6 +220,8 @@ set showmatch           " highlight matching parenthesis
 set scrolloff=3         " when scrolling, keep cursor 3 lines away from screen border
 set wildmenu              " autocompletion of files and commands behaves like shell
 set wildmode=list:longest " (complete only the common part, list the options that match)
+set laststatus=2
+set noshowmode                  " mode is shown in status line, hide default
 " }}}
 
 " Searching {{{
@@ -259,6 +271,12 @@ augroup sass_group
     autocmd!
     autocmd FileType scss setlocal autoindent smartindent ts=2 sts=2 sw=2 expandtab
 augroup END
+
+augroup phpSyntaxOverride
+    autocmd!
+    autocmd FileType php call PhpSyntaxOverride()
+augroup END
+
 " }}}
 
 " Commands {{{
@@ -278,6 +296,11 @@ function! <SID>StripTrailingWhitespaces()
     %s/\s\+$//e
     let @/=_s
     call cursor(l, c)
+endfunction
+
+function! PhpSyntaxOverride()
+    hi! def link phpDocTags  phpDefine
+    hi! def link phpDocParam phpType
 endfunction
 
 " }}}
