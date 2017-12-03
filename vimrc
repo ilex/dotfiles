@@ -17,7 +17,7 @@ Plug 'itchyny/lightline.vim'                " Light status line
 Plug 'scrooloose/nerdtree'                  " Tree file manager
 Plug 'majutsushi/tagbar'                    " Modules/classes/methods manager
 Plug 'ctrlpvim/ctrlp.vim'                   " Fuzzy finder
-Plug 'dyng/ctrlsf.vim'                      " Fuzzy search 
+Plug 'dyng/ctrlsf.vim'                      " Fuzzy search
 Plug 'tpope/vim-commentary'                 " Comment out
 Plug 'tpope/vim-surround'                   " Surround with s
 " Plug 'maralla/validator.vim'                " Code validation
@@ -25,17 +25,19 @@ Plug 'tpope/vim-surround'                   " Surround with s
 Plug 'w0rp/ale'                             " Code validation
 Plug 'Raimondi/delimitMate'                 " Auto close quotes, parenthesis, brackets, etc.
 Plug 'Yggdroot/indentLine'                  " Vertical lines on identations
-Plug 'gko/vim-coloresque'                   " Colorize colors in css 
+Plug 'gko/vim-coloresque'                   " Colorize colors in css
+Plug 'thaerkh/vim-workspace'                " Session and autosave
 " Plug 'shmargum/vim-sass-colors'             " Show colors in css, sass
 
 " Git
 Plug 'airblade/vim-gitgutter'               " Remove/modify/new line signs for git
 Plug 'xuyuanp/nerdtree-git-plugin'          " Git changes in tree
 Plug 'tpope/vim-fugitive'                   " Git commands
+Plug 'junegunn/gv.vim'                      " Commit browser with GV command
 " Snippets
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
-" Html 
+" Html
 Plug 'rstacruz/sparkup'                     " expand html from css like syntax
 Plug 'valloric/matchtagalways'              " match html tags
 " Autocomplete
@@ -63,6 +65,18 @@ call plug#end()
 
 " Plugins Options {{{
 
+" LightLine {{{
+    let g:lightline = {
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'fugitive#head'
+      \ },
+      \ }
+" }}}
+
 " Airline {{{
     " let g:airline_powerline_fonts = 1
     " let g:airline#extensions#tabline#left_sep = ' '
@@ -76,9 +90,14 @@ call plug#end()
 " " }}}
 
 " Autocomplete {{{
+    " debug
+    " let g:asyncomplete_log_file = expand('~/asyncomplete.log')
+    " let g:lsp_log_verbose = 1
+    " let g:lsp_log_file = expand('~/vim-lsp.log')
+
     set completeopt=menuone,menu,longest,preview
     let g:asyncomplete_remove_duplicates = 1
-    " Python 
+    " Python
     if executable('pyls')
         " pip install python-language-server
         au User lsp_setup call lsp#register_server({
@@ -102,14 +121,15 @@ call plug#end()
         \ 'blacklist': ['go'],
         \ 'priority': 2,
         \ 'completor': function('asyncomplete#sources#buffer#completor'),
-        \ })) 
+        \ }))
     " php
-    au User lsp_setup call lsp#register_server({                                    
-        \ 'name': 'php-language-server',                                            
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'php-language-server',
         \ 'cmd': {server_info->['php', expand('~/.vim/plugged/php-language-server/bin/php-language-server.php')]},
-        \ 'whitelist': ['php'],                                                     
+        \ 'root_uri':{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'composer.json'))},
+        \ 'whitelist': ['php'],
         \ })
-    " Use Tab to navigate    
+    " Use Tab to navigate
     inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
     inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
     inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
@@ -140,6 +160,10 @@ let g:gitgutter_enabled = 0
 " CtrlP {{{
     let g:ctrlp_custom_ignore = '\vbuild/|dist/|venv/|target/|\.git/\.(o|swp|pyc|egg)$'
 " }}}
+
+" Workspace {{{
+    let g:workspace_autosave_always = 1
+" }}}
 " }}}
 
 " Keys mapping {{{
@@ -167,7 +191,7 @@ let g:gitgutter_enabled = 0
 " Leader Shortcuts {{{
 let mapleader=","
 " paste from external buffer
-" map <Leader>p "*p
+map <Leader>p "*p
 " save file
 map <leader>w :w<CR>
 " quit file
@@ -175,9 +199,11 @@ map <leader>x :q<CR>
 " quit all
 map <leader>q :qa<CR>
 " Yank and put helpers. (try)
-noremap <leader>y        :let @0=getreg('*')<CR>
-noremap <leader>p        "0]p
-noremap <leader>P        "0]P'
+noremap <leader>y :let @0=getreg('*')<CR>
+" noremap <leader>p        "0]p
+noremap <leader>P "0]P'
+" Session start
+nnoremap <leader>s :ToggleWorkspace<CR>
 " }}}
 
 " Settings {{{
@@ -244,8 +270,8 @@ set foldlevelstart=10    " start with fold level of 1
 augroup config_group
     autocmd!
     autocmd VimEnter * highlight clear SignColumn
-    autocmd FileType vim setlocal foldmethod=marker 
-    autocmd BufRead .vimrc setlocal foldlevel=0 
+    autocmd FileType vim setlocal foldmethod=marker
+    autocmd BufRead .vimrc setlocal foldlevel=0
     autocmd BufWritePre *.py,*.php,*.js,*.txt,*.hs,*.java,*.md,*.rb,*.css,*.jinja2,*.html :call <SID>StripTrailingWhitespaces()
 augroup END
 
@@ -282,7 +308,7 @@ augroup END
 " Commands {{{
 " save as sudo
 ca w!! w !sudo tee "%"
-" }}} 
+" }}}
 
 " Custom functions {{{
 
