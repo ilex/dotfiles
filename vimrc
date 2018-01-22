@@ -9,9 +9,6 @@ call plug#begin()
 " Theme
 Plug 'altercation/vim-colors-solarized'
 " Status line and tab line
-" Plug 'vim-airline/vim-airline'
-" Plug 'vim-airline/vim-airline-themes'
-" Plug 'Lokaltog/powerline'                   " Powerline fonts plugin
 Plug 'itchyny/lightline.vim'                " Light status line
 " Tools
 Plug 'scrooloose/nerdtree'                  " Tree file manager
@@ -20,46 +17,48 @@ Plug 'ctrlpvim/ctrlp.vim'                   " Fuzzy finder
 Plug 'dyng/ctrlsf.vim'                      " Fuzzy search
 Plug 'tpope/vim-commentary'                 " Comment out
 Plug 'tpope/vim-surround'                   " Surround with s
-" Plug 'maralla/validator.vim'                " Code validation
 " Plug 'https://github.com/idanarye/vim-vebugger'   -- consider to use
 Plug 'w0rp/ale'                             " Code validation
 Plug 'Raimondi/delimitMate'                 " Auto close quotes, parenthesis, brackets, etc.
-Plug 'Yggdroot/indentLine'                  " Vertical lines on identations
-Plug 'gko/vim-coloresque'                   " Colorize colors in css
-Plug 'thaerkh/vim-workspace'                " Session and autosave
+" Plug 'gko/vim-coloresque'                   " Colorize colors in css
+" Plug 'thaerkh/vim-workspace'                " Session and autosave
 " Plug 'shmargum/vim-sass-colors'             " Show colors in css, sass
-
 " Git
 Plug 'airblade/vim-gitgutter'               " Remove/modify/new line signs for git
 Plug 'xuyuanp/nerdtree-git-plugin'          " Git changes in tree
 Plug 'tpope/vim-fugitive'                   " Git commands
 Plug 'junegunn/gv.vim'                      " Commit browser with GV command
 " Snippets
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
+" Plug 'SirVer/ultisnips'
+" Plug 'honza/vim-snippets'
+Plug 'Shougo/neosnippet.vim'
+Plug 'Shougo/neosnippet-snippets'
 " Html
 Plug 'rstacruz/sparkup'                     " expand html from css like syntax
-Plug 'valloric/matchtagalways'              " match html tags
+" Plug 'valloric/matchtagalways'              " match html tags
 " Autocomplete
-Plug 'prabirshrestha/asyncomplete.vim'
-Plug 'prabirshrestha/async.vim'
-Plug 'prabirshrestha/vim-lsp'
-Plug 'prabirshrestha/asyncomplete-lsp.vim'
-Plug 'prabirshrestha/asyncomplete-ultisnips.vim'
-Plug 'prabirshrestha/asyncomplete-buffer.vim'
-Plug 'felixfbecker/php-language-server', {'do': 'composer install && composer run-script parse-stubs'}
+Plug 'ilex/aiocomplete.vim'
+" Plug 'prabirshrestha/async.vim'
+" Plug 'prabirshrestha/vim-lsp'
+" Plug 'prabirshrestha/asyncomplete-lsp.vim'
+" Plug 'prabirshrestha/asyncomplete-ultisnips.vim'
+" Plug 'prabirshrestha/asyncomplete-buffer.vim'
+" Plug 'felixfbecker/php-language-server', {'do': 'composer install && composer run-script parse-stubs'}
+" Plug 'maralla/completor.vim'
 " Vim
 " Plug 'pseewald/vim-anyfold'                 " Fold code blocks with za, ..., move with ]], etc
-Plug 'junegunn/vader.vim'                   " vim test framework
+" Plug 'junegunn/vader.vim'                   " vim test framework
 " Python
 Plug 'Vimjas/vim-python-pep8-indent'        " Indent python code
-Plug 'vim-python/python-syntax'             " highlight python code
+" Plug 'vim-python/python-syntax'             " highlight python code
 Plug 'tmhedberg/SimpylFold'                 " Properly fold python code
+" Plug 'davidhalter/jedi-vim'                 " Jedi vim 
+Plug 'lambdalisue/vim-pyenv'                " pyenv
 " Jinja2
 Plug 'Glench/Vim-Jinja2-Syntax'
 " PHP
-Plug 'StanAngeloff/php.vim'                 " Php syntax (try)
-Plug 'tobyS/pdv'                            " Php documenter (try)
+" Plug 'StanAngeloff/php.vim'                 " Php syntax (try)
+" Plug 'tobyS/pdv'                            " Php documenter (try)
 call plug#end()
 " }}}
 
@@ -77,62 +76,33 @@ call plug#end()
       \ }
 " }}}
 
-" Airline {{{
-    " let g:airline_powerline_fonts = 1
-    " let g:airline#extensions#tabline#left_sep = ' '
-    " let g:airline#extensions#tabline#left_alt_sep = '|'
-    " let g:airline#extensions#branch#format = 2
-    " " hide spell
-    " let g:airline_detect_spell=0
-    " " hide encoding
-    " let g:airline_section_y=''
-    " set laststatus=2
-" " }}}
-
 " Autocomplete {{{
-    " debug
-    " let g:asyncomplete_log_file = expand('~/asyncomplete.log')
-    " let g:lsp_log_verbose = 1
-    " let g:lsp_log_file = expand('~/vim-lsp.log')
-
-    set completeopt=menuone,menu,longest,preview
-    let g:asyncomplete_remove_duplicates = 1
-    " Python
-    if executable('pyls')
-        " pip install python-language-server
-        au User lsp_setup call lsp#register_server({
-            \ 'name': 'pyls',
-            \ 'cmd': {server_info->['pyls']},
-            \ 'priority': 3,
-            \ 'whitelist': ['python'],
-            \ })
-    endif
-    " Snippets
-    call asyncomplete#register_source(asyncomplete#sources#ultisnips#get_source_options({
-        \ 'name': 'ultisnips',
-        \ 'whitelist': ['*'],
-        \ 'priority': 1,
-        \ 'completor': function('asyncomplete#sources#ultisnips#completor'),
-        \ }))
-    " Buffer
-    call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
-        \ 'name': 'buffer',
-        \ 'whitelist': ['*'],
-        \ 'blacklist': ['go'],
-        \ 'priority': 2,
-        \ 'completor': function('asyncomplete#sources#buffer#completor'),
-        \ }))
-    " php
-    au User lsp_setup call lsp#register_server({
-        \ 'name': 'php-language-server',
-        \ 'cmd': {server_info->['php', expand('~/.vim/plugged/php-language-server/bin/php-language-server.php')]},
-        \ 'root_uri':{server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'composer.json'))},
-        \ 'whitelist': ['php'],
-        \ })
     " Use Tab to navigate
-    inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+    inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
     inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
     inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
+    set completeopt=menu,menuone,noselect
+
+    let s:completors = {}
+    let s:completors['buffer'] = {
+                \ 'exclude': ['python'],
+                \ 'invoke_pattern': '\h\w*$'
+                \ }
+
+    let s:completors['jedi'] = {
+                \ 'include': ['python'],
+                \ 'priority': 0,
+                \ }
+
+    let s:completors['neosnippet'] = {
+                \ 'include': ['*'],
+                \ 'priority': 1,
+                \ }
+
+    call aiocomplete#init({
+                \ 'completors': s:completors,
+                \ 'debounce_delay': 200
+                \ })
 " }}}
 
 " Ale {{{
@@ -141,11 +111,15 @@ call plug#end()
 " }}}
 
 " Snippets {{{
-    let g:UltiSnipsExpandTrigger="<c-e>"
+    " let g:UltiSnipsExpandTrigger="<c-e>"
+    imap <C-e>     <Plug>(neosnippet_expand_or_jump)
+    smap <C-e>     <Plug>(neosnippet_expand_or_jump)
+    xmap <C-e>     <Plug>(neosnippet_expand_target)
 " }}}
 
-" Python syntax {{{
+" Python {{{
 let g:python_highlight_all = 1
+let g:jedi#completions_enabled = 0
 " }}}
 
 " Git {{{
@@ -161,9 +135,6 @@ let g:gitgutter_enabled = 0
     let g:ctrlp_custom_ignore = '\vbuild/|dist/|venv/|target/|\.git/\.(o|swp|pyc|egg)$'
 " }}}
 
-" Workspace {{{
-    let g:workspace_autosave_always = 1
-" }}}
 " }}}
 
 " Keys mapping {{{
@@ -298,10 +269,10 @@ augroup sass_group
     autocmd FileType scss setlocal autoindent smartindent ts=2 sts=2 sw=2 expandtab
 augroup END
 
-augroup phpSyntaxOverride
-    autocmd!
-    autocmd FileType php call PhpSyntaxOverride()
-augroup END
+" augroup phpSyntaxOverride
+"    autocmd!
+"    autocmd FileType php call PhpSyntaxOverride()
+" augroup END
 
 " }}}
 
