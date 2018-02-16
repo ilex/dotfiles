@@ -7,7 +7,8 @@ set nocompatible
 "     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 call plug#begin()
 " Theme
-Plug 'altercation/vim-colors-solarized'
+" Plug 'altercation/vim-colors-solarized'
+Plug 'morhetz/gruvbox'
 " Status line and tab line
 Plug 'itchyny/lightline.vim'                " Light status line
 " Tools
@@ -20,31 +21,31 @@ Plug 'tpope/vim-surround'                   " Surround with s
 " Plug 'https://github.com/idanarye/vim-vebugger'   -- consider to use
 Plug 'w0rp/ale'                             " Code validation
 Plug 'Raimondi/delimitMate'                 " Auto close quotes, parenthesis, brackets, etc.
-" Plug 'gko/vim-coloresque'                   " Colorize colors in css
 " Plug 'thaerkh/vim-workspace'                " Session and autosave
-" Plug 'shmargum/vim-sass-colors'             " Show colors in css, sass
 " Git
 Plug 'airblade/vim-gitgutter'               " Remove/modify/new line signs for git
 Plug 'xuyuanp/nerdtree-git-plugin'          " Git changes in tree
 Plug 'tpope/vim-fugitive'                   " Git commands
 Plug 'junegunn/gv.vim'                      " Commit browser with GV command
 " Snippets
-" Plug 'SirVer/ultisnips'
-" Plug 'honza/vim-snippets'
-Plug 'Shougo/neosnippet.vim'
-Plug 'Shougo/neosnippet-snippets'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+" Plug 'Shougo/neosnippet.vim'
+" Plug 'Shougo/neosnippet-snippets'
 " Html
 Plug 'rstacruz/sparkup'                     " expand html from css like syntax
-" Plug 'valloric/matchtagalways'              " match html tags
+Plug 'alvan/vim-closetag'                   " auto close tags
+Plug 'valloric/matchtagalways'              " match html tags
 " Autocomplete
-Plug 'ilex/aiocomplete.vim'
+" Plug 'ilex/aiocomplete.vim'
 " Plug 'prabirshrestha/async.vim'
 " Plug 'prabirshrestha/vim-lsp'
 " Plug 'prabirshrestha/asyncomplete-lsp.vim'
 " Plug 'prabirshrestha/asyncomplete-ultisnips.vim'
 " Plug 'prabirshrestha/asyncomplete-buffer.vim'
 " Plug 'felixfbecker/php-language-server', {'do': 'composer install && composer run-script parse-stubs'}
-" Plug 'maralla/completor.vim'
+Plug 'maralla/completor.vim'
+" Plug 'maralla/completor-neosnippet'
 " Vim
 " Plug 'pseewald/vim-anyfold'                 " Fold code blocks with za, ..., move with ]], etc
 " Plug 'junegunn/vader.vim'                   " vim test framework
@@ -53,10 +54,11 @@ Plug 'Vimjas/vim-python-pep8-indent'        " Indent python code
 " Plug 'vim-python/python-syntax'             " highlight python code
 Plug 'tmhedberg/SimpylFold'                 " Properly fold python code
 " Plug 'davidhalter/jedi-vim'                 " Jedi vim 
-Plug 'lambdalisue/vim-pyenv'                " pyenv
+" Plug 'lambdalisue/vim-pyenv'                " pyenv
 " Jinja2
 Plug 'Glench/Vim-Jinja2-Syntax'
 " PHP
+" Plug 'phpactor/phpactor'
 " Plug 'StanAngeloff/php.vim'                 " Php syntax (try)
 " Plug 'tobyS/pdv'                            " Php documenter (try)
 call plug#end()
@@ -78,31 +80,37 @@ call plug#end()
 
 " Autocomplete {{{
     " Use Tab to navigate
-    inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-    inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
-    set completeopt=menu,menuone,noselect
+    " inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+    " inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+    " inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
+    " set completeopt=menu,menuone,noselect
 
-    let s:completors = {}
-    let s:completors['buffer'] = {
-                \ 'exclude': ['python'],
-                \ 'invoke_pattern': '\h\w*$'
-                \ }
+    " let s:completors = {}
+    " let s:completors['buffer'] = {
+    "             \ 'exclude': ['python'],
+    "             \ 'invoke_pattern': '\h\w*$'
+    "             \ }
 
-    let s:completors['jedi'] = {
-                \ 'include': ['python'],
-                \ 'priority': 0,
-                \ }
+    " let s:completors['jedi'] = {
+    "             \ 'include': ['python'],
+    "             \ 'priority': 0,
+    "             \ }
 
-    let s:completors['neosnippet'] = {
-                \ 'include': ['*'],
-                \ 'priority': 1,
-                \ }
+    " let s:completors['neosnippet'] = {
+    "             \ 'include': ['*'],
+    "             \ 'priority': 1,
+    "             \ }
 
-    call aiocomplete#init({
-                \ 'completors': s:completors,
-                \ 'debounce_delay': 200
-                \ })
+    " call aiocomplete#init({
+    "             \ 'completors': s:completors,
+    "             \ 'debounce_delay': 200
+    "             \ })
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <cr> pumvisible() ? "\<C-y>\<cr>" : "\<cr>"
+
+
+" let g:completor_python_binary = '/home/ilex/.pyenv/shims/python'
 " }}}
 
 " Ale {{{
@@ -133,6 +141,10 @@ let g:gitgutter_enabled = 0
 
 " CtrlP {{{
     let g:ctrlp_custom_ignore = '\vbuild/|dist/|venv/|target/|\.git/\.(o|swp|pyc|egg)$'
+" }}}
+
+" PHP {{{
+    " autocmd FileType php setlocal omnifunc=phpactor#Complete
 " }}}
 
 " }}}
@@ -182,9 +194,12 @@ nnoremap <leader>s :ToggleWorkspace<CR>
 " Colors {{{
 syntax enable           " enable syntax processing
 set t_Co=256
-let g:solarized_termcolors=256
+" let g:solarized_termcolors=256
 set background=dark
-colorscheme solarized
+" colorscheme solarized
+let g:gruvbox_contrast_dark='hard'
+let g:gruvbox_italic='1'
+colorscheme gruvbox
 " }}}
 
 " Misc {{{
@@ -299,5 +314,4 @@ function! PhpSyntaxOverride()
     hi! def link phpDocTags  phpDefine
     hi! def link phpDocParam phpType
 endfunction
-
 " }}}
