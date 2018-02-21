@@ -46,6 +46,7 @@ Plug 'valloric/matchtagalways'              " match html tags
 " Plug 'felixfbecker/php-language-server', {'do': 'composer install && composer run-script parse-stubs'}
 Plug 'maralla/completor.vim'
 " Plug 'maralla/completor-neosnippet'
+" Plug 'roxma/nvim-completion-manager'
 " Vim
 " Plug 'pseewald/vim-anyfold'                 " Fold code blocks with za, ..., move with ]], etc
 " Plug 'junegunn/vader.vim'                   " vim test framework
