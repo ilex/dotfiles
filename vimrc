@@ -109,8 +109,6 @@ call plug#end()
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 inoremap <expr> <cr> pumvisible() ? "\<C-y>\<cr>" : "\<cr>"
-
-
 " let g:completor_python_binary = '/home/ilex/.pyenv/shims/python'
 " }}}
 
@@ -120,10 +118,10 @@ inoremap <expr> <cr> pumvisible() ? "\<C-y>\<cr>" : "\<cr>"
 " }}}
 
 " Snippets {{{
-    " let g:UltiSnipsExpandTrigger="<c-e>"
-    imap <C-e>     <Plug>(neosnippet_expand_or_jump)
-    smap <C-e>     <Plug>(neosnippet_expand_or_jump)
-    xmap <C-e>     <Plug>(neosnippet_expand_target)
+    let g:UltiSnipsExpandTrigger="<c-u>"
+    " imap <C-e>     <Plug>(neosnippet_expand_or_jump)
+    " smap <C-e>     <Plug>(neosnippet_expand_or_jump)
+    " xmap <C-e>     <Plug>(neosnippet_expand_target)
 " }}}
 
 " Python {{{

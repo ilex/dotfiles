@@ -29,6 +29,14 @@ Plug 'junegunn/gv.vim'                      " Commit browser with GV command
 Plug 'roxma/nvim-completion-manager'
 " }}}
 
+" Snippets {{{
+    " Track the engine.
+    Plug 'SirVer/ultisnips'
+
+    " Snippets are separated from the engine. Add this if you want them:
+    Plug 'honza/vim-snippets'
+" }}}
+
 call plug#end()
 " }}}
 
@@ -67,8 +75,20 @@ inoremap <C-F>t <Esc>:CtrlSFToggle<CR>
 " }}}
 
 " Autocomlete {{{
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+    " don't show completion messages
+    set shortmess+=c
+    " Use tab to navigate through results
+    inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+    " Expand snippets on Enter (they should be expanded with ctrl-U)
+    imap <expr> <CR>  (pumvisible() ?  "\<c-y>\<Plug>(expand_or_nl)" : "\<CR>")
+    imap <expr> <Plug>(expand_or_nl) (cm#completed_is_snippet() ? "\<C-U>":"\<CR>")
+" }}}
+
+" Snippets {{{
+    let g:UltiSnipsExpandTrigger="<C-U>"
+    let g:UltiSnipsJumpForwardTrigger="<c-b>"
+    let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 " }}}
 
 " }}}
