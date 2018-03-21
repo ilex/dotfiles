@@ -1,67 +1,49 @@
 set nocompatible
 
 " Plugins {{{
-" Use Vim Plug to manage plugins
-" Install it with follow
-" $ curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-"     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 call plug#begin()
-" Theme
-" Plug 'altercation/vim-colors-solarized'
-Plug 'morhetz/gruvbox'
-" Status line and tab line
-Plug 'itchyny/lightline.vim'                " Light status line
-" Tools
-Plug 'scrooloose/nerdtree'                  " Tree file manager
-Plug 'majutsushi/tagbar'                    " Modules/classes/methods manager
-Plug 'ctrlpvim/ctrlp.vim'                   " Fuzzy finder
-Plug 'dyng/ctrlsf.vim'                      " Fuzzy search
-Plug 'tpope/vim-commentary'                 " Comment out
-Plug 'tpope/vim-surround'                   " Surround with s
-" Plug 'https://github.com/idanarye/vim-vebugger'   -- consider to use
-Plug 'w0rp/ale'                             " Code validation
-Plug 'Raimondi/delimitMate'                 " Auto close quotes, parenthesis, brackets, etc.
-" Plug 'thaerkh/vim-workspace'                " Session and autosave
-" Git
-Plug 'airblade/vim-gitgutter'               " Remove/modify/new line signs for git
-Plug 'xuyuanp/nerdtree-git-plugin'          " Git changes in tree
-Plug 'tpope/vim-fugitive'                   " Git commands
-Plug 'junegunn/gv.vim'                      " Commit browser with GV command
-" Snippets
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
-" Plug 'Shougo/neosnippet.vim'
-" Plug 'Shougo/neosnippet-snippets'
-" Html
-Plug 'rstacruz/sparkup'                     " expand html from css like syntax
-Plug 'alvan/vim-closetag'                   " auto close tags
-Plug 'valloric/matchtagalways'              " match html tags
-" Autocomplete
-" Plug 'ilex/aiocomplete.vim'
-" Plug 'prabirshrestha/async.vim'
-" Plug 'prabirshrestha/vim-lsp'
-" Plug 'prabirshrestha/asyncomplete-lsp.vim'
-" Plug 'prabirshrestha/asyncomplete-ultisnips.vim'
-" Plug 'prabirshrestha/asyncomplete-buffer.vim'
-" Plug 'felixfbecker/php-language-server', {'do': 'composer install && composer run-script parse-stubs'}
-Plug 'maralla/completor.vim'
-" Plug 'maralla/completor-neosnippet'
-" Plug 'roxma/nvim-completion-manager'
-" Vim
-" Plug 'pseewald/vim-anyfold'                 " Fold code blocks with za, ..., move with ]], etc
-" Plug 'junegunn/vader.vim'                   " vim test framework
-" Python
-Plug 'Vimjas/vim-python-pep8-indent'        " Indent python code
-" Plug 'vim-python/python-syntax'             " highlight python code
-Plug 'tmhedberg/SimpylFold'                 " Properly fold python code
-" Plug 'davidhalter/jedi-vim'                 " Jedi vim 
-" Plug 'lambdalisue/vim-pyenv'                " pyenv
-" Jinja2
-Plug 'Glench/Vim-Jinja2-Syntax'
-" PHP
-" Plug 'phpactor/phpactor'
-" Plug 'StanAngeloff/php.vim'                 " Php syntax (try)
-" Plug 'tobyS/pdv'                            " Php documenter (try)
+
+" UI {{{
+    Plug 'morhetz/gruvbox'                      " Colour theme
+    Plug 'itchyny/lightline.vim'                " Light status line
+" }}}
+
+" Tools {{{
+    Plug 'scrooloose/nerdtree'                  " Tree file manager
+    Plug 'majutsushi/tagbar'                    " Modules/classes/methods manager
+    Plug 'ctrlpvim/ctrlp.vim'                   " Fuzzy finder
+    Plug 'nixprime/cpsm', { 'do': 'env PY3=ON ./install.sh' }  " matcher for CtrlP
+    Plug 'dyng/ctrlsf.vim'                      " Fuzzy search
+    Plug 'tpope/vim-commentary'                 " Comment out
+    Plug 'tpope/vim-surround'                   " Surround with s
+    Plug 'Raimondi/delimitMate'                 " Auto close quotes, parenthesis, brackets, etc.
+    Plug 'w0rp/ale'                             " Lint engine
+    " Plug 'mbbill/undotree'                      " local file changes history
+    " Plug 'Konfekt/FastFold'                     
+" }}}
+
+" Git {{{
+    " Plug 'airblade/vim-gitgutter'               " Remove/modify/new line signs for git
+    " Plug 'xuyuanp/nerdtree-git-plugin'          " Git changes in tree
+    Plug 'tpope/vim-fugitive'                   " Git commands
+    Plug 'junegunn/gv.vim'                      " Commit browser with GV command
+" }}}
+
+" Autocomplete {{{
+    " Plug 'roxma/nvim-completion-manager'
+    Plug 'maralla/completor.vim'
+" }}}
+
+" Snippets {{{
+    Plug 'SirVer/ultisnips'
+    Plug 'honza/vim-snippets'
+" }}}
+
+" Python {{{
+    Plug 'davidhalter/jedi-vim'
+    " Plug 'dbsr/vimpy'                           " automatic imports
+" }}}
+
 call plug#end()
 " }}}
 
@@ -79,71 +61,69 @@ call plug#end()
       \ }
 " }}}
 
-" Autocomplete {{{
-    " Use Tab to navigate
-    " inoremap <silent><expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-    " inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-    " inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
-    " set completeopt=menu,menuone,noselect
-
-    " let s:completors = {}
-    " let s:completors['buffer'] = {
-    "             \ 'exclude': ['python'],
-    "             \ 'invoke_pattern': '\h\w*$'
-    "             \ }
-
-    " let s:completors['jedi'] = {
-    "             \ 'include': ['python'],
-    "             \ 'priority': 0,
-    "             \ }
-
-    " let s:completors['neosnippet'] = {
-    "             \ 'include': ['*'],
-    "             \ 'priority': 1,
-    "             \ }
-
-    " call aiocomplete#init({
-    "             \ 'completors': s:completors,
-    "             \ 'debounce_delay': 200
-    "             \ })
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-inoremap <expr> <cr> pumvisible() ? "\<C-y>\<cr>" : "\<cr>"
-" let g:completor_python_binary = '/home/ilex/.pyenv/shims/python'
-" }}}
-
-" Ale {{{
-    let g:airline#extensions#ale#enabled = 1
-    let g:ale_lint_delay = 1000
-" }}}
-
-" Snippets {{{
-    let g:UltiSnipsExpandTrigger="<c-u>"
-    " imap <C-e>     <Plug>(neosnippet_expand_or_jump)
-    " smap <C-e>     <Plug>(neosnippet_expand_or_jump)
-    " xmap <C-e>     <Plug>(neosnippet_expand_target)
-" }}}
-
-" Python {{{
-let g:python_highlight_all = 1
-let g:jedi#completions_enabled = 0
-" }}}
-
-" Git {{{
-" turn off git signs
-let g:gitgutter_enabled = 0
-" }}}
-
 " NERDTree {{{
     let NERDTreeIgnore = ['\.pyc$', '\.pyo$', '^__pycache__', 'build', 'venv', 'egg', 'egg-info/', 'dist']
 " }}}
 
 " CtrlP {{{
-    let g:ctrlp_custom_ignore = '\vbuild/|dist/|venv/|target/|\.git/\.(o|swp|pyc|egg)$'
+    let g:ctrlp_custom_ignore = '\vbuild/|dist/|venv/|target/|__pycache__/|\.git/\.(o|swp|pyc|egg|pyo)$'
+    let g:ctrlp_match_func = { 'match': 'cpsm#CtrlPMatch' }
 " }}}
 
-" PHP {{{
-    " autocmd FileType php setlocal omnifunc=phpactor#Complete
+" CtrlSF {{{
+let g:ctrlsf_ackprg = '/usr/local/bin/ag'
+nmap     <C-F>f <Plug>CtrlSFPrompt
+vmap     <C-F>f <Plug>CtrlSFVwordPath
+vmap     <C-F>F <Plug>CtrlSFVwordExec
+nmap     <C-F>n <Plug>CtrlSFCwordPath
+nmap     <C-F>p <Plug>CtrlSFPwordPath
+nnoremap <C-F>o :CtrlSFOpen<CR>
+nnoremap <C-F>t :CtrlSFToggle<CR>
+inoremap <C-F>t <Esc>:CtrlSFToggle<CR>
+" }}}
+
+" Autocomlete {{{
+    " don't show completion messages
+    set shortmess+=c
+    " Use tab to navigate through results
+    inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+    " " Expand snippets on Enter (they should be expanded with ctrl-U)
+    " imap <expr> <CR>  (pumvisible() ?  "\<c-y>\<Plug>(expand_or_nl)" : "\<CR>")
+    " imap <expr> <Plug>(expand_or_nl) (cm#completed_is_snippet() ? "\<C-U>":"\<CR>")
+    inoremap <expr> <cr> pumvisible() ? "\<C-y>\<cr>" : "\<cr>"
+    " let g:completor_python_binary = '/home/ilex/.pyenv/shims/python'
+" }}}
+
+" Snippets {{{
+    let g:UltiSnipsExpandTrigger="<C-U>"
+    let g:UltiSnipsJumpForwardTrigger="<c-b>"
+    let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+" }}}
+
+" Python {{{
+    " turn off completion
+    let g:jedi#completions_enabled = 0
+
+    let g:jedi#goto_command = "<leader>d"
+    let g:jedi#goto_assignments_command = "<leader>g"
+    let g:jedi#documentation_command = "K"
+    let g:jedi#usages_command = "<leader>n"
+    let g:jedi#rename_command = "<leader>r"
+
+    let g:vimpy_prompt_resolve = 1
+    let g:vimpy_remove_unused = 1
+" }}}
+
+" ALE {{{
+let g:ale_fixers = {
+            \   'python': [
+            \       'trim_whitespace',
+            \       'remove_trailing_lines',
+            \       'isort',
+            \       'yapf'
+            \   ],
+            \}
 " }}}
 
 " }}}
@@ -185,34 +165,24 @@ noremap <leader>y :let @0=getreg('*')<CR>
 " noremap <leader>p        "0]p
 noremap <leader>P "0]P'
 " Session start
-nnoremap <leader>s :ToggleWorkspace<CR>
+nnoremap <leader>s :mksession<CR>
+" Fuzzy search
+nnoremap <leader>f :CtrlSF 
 " }}}
 
 " Settings {{{
 
 " Colors {{{
 syntax enable           " enable syntax processing
-set t_Co=256
-" let g:solarized_termcolors=256
+" set t_Co=256
 set background=dark
-" colorscheme solarized
 let g:gruvbox_contrast_dark='hard'
 let g:gruvbox_italic='1'
 colorscheme gruvbox
 " }}}
 
-" Misc {{{
-set ttyfast                     " faster redraw
-set lazyredraw
-set backspace=indent,eol,start  " make backspace work as usual
-set updatetime=1000             " update to show git gutters
-set autochdir 			        " automatically change window's cwd to file's dir
-set spelllang=en                " spell checking language
-set spellfile=$HOME/.vim/spell/en.utf-8.add     " file to add new words for spell checking
-set spell                       " turn on spell checking
-" }}}
-
 " Spaces & Tabs {{{
+set backspace=indent,eol,start  " make backspace work as usual
 set tabstop=4           " 4 space tab
 set expandtab           " use spaces for tabs
 set softtabstop=4       " 4 space tab
@@ -233,6 +203,7 @@ set wildmenu              " autocompletion of files and commands behaves like sh
 set wildmode=list:longest " (complete only the common part, list the options that match)
 set laststatus=2
 set noshowmode                  " mode is shown in status line, hide default
+set lazyredraw
 " }}}
 
 " Searching {{{
@@ -249,6 +220,13 @@ set foldnestmax=10      " max 10 depth
 set foldenable          " don't fold files by default on open
 set foldlevelstart=10    " start with fold level of 1
 " }}}
+
+" Spelling {{{
+set spelllang=en                " spell checking language
+set spellfile=$HOME/.vim/spell/en.utf-8.add     " file to add new words for spell checking
+set spell                       " turn on spell checking
+" }}}
+
 " }}}
 
 " AutoGroups {{{
@@ -260,44 +238,33 @@ augroup config_group
     autocmd BufWritePre *.py,*.php,*.js,*.txt,*.hs,*.java,*.md,*.rb,*.css,*.jinja2,*.html :call <SID>StripTrailingWhitespaces()
 augroup END
 
-augroup python_group
-    autocmd!
-    autocmd FileType python setlocal signcolumn=yes
-    " autocmd InsertLeave *.py :call <SID>StripTrailingWhitespaces()
-    autocmd FileType python map <silent> <leader>b oimport pdb; pdb.set_trace()<esc>
-augroup END
+" augroup python_group
+"     autocmd!
+"     autocmd FileType python setlocal signcolumn=yes
+"     autocmd FileType python map <silent> <leader>b oimport pdb; pdb.set_trace()<esc>
+" augroup END
 
-augroup jinja2_group
-    autocmd!
-    autocmd BufNewFile,BufRead *.html,*.jinja2 setlocal filetype=jinja
-    autocmd FileType jinja setlocal autoindent smartindent ts=2 sts=2 sw=2 expandtab
-augroup END
+" augroup jinja2_group
+"     autocmd!
+"     autocmd BufNewFile,BufRead *.html,*.jinja2 setlocal filetype=jinja
+"     autocmd FileType jinja setlocal autoindent smartindent ts=2 sts=2 sw=2 expandtab
+" augroup END
 
-augroup yaml_group
-    autocmd!
-    autocmd FileType yaml setlocal autoindent smartindent ts=2 sts=2 sw=2 expandtab
-augroup END
+" augroup yaml_group
+"     autocmd!
+"     autocmd FileType yaml setlocal autoindent smartindent ts=2 sts=2 sw=2 expandtab
+" augroup END
 
-augroup sass_group
-    autocmd!
-    autocmd FileType scss setlocal autoindent smartindent ts=2 sts=2 sw=2 expandtab
-augroup END
-
-" augroup phpSyntaxOverride
-"    autocmd!
-"    autocmd FileType php call PhpSyntaxOverride()
+" augroup sass_group
+"     autocmd!
+"     autocmd FileType scss setlocal autoindent smartindent ts=2 sts=2 sw=2 expandtab
 " augroup END
 
 " }}}
 
-" Commands {{{
-" save as sudo
-ca w!! w !sudo tee "%"
-" }}}
-
 " Custom functions {{{
 
-" strips trailing whitespace at the end of files. this
+" strips trailing whitespace at the end of files. This
 " is called on buffer write in the autogroup above.
 function! <SID>StripTrailingWhitespaces()
     " save last search & cursor position
@@ -309,8 +276,9 @@ function! <SID>StripTrailingWhitespaces()
     call cursor(l, c)
 endfunction
 
-function! PhpSyntaxOverride()
-    hi! def link phpDocTags  phpDefine
-    hi! def link phpDocParam phpType
-endfunction
+" }}}
+
+" Commands {{{
+    " save as sudo
+    ca w!! w !sudo tee "%"
 " }}}

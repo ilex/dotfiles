@@ -16,6 +16,7 @@ Plug 'dyng/ctrlsf.vim'                      " Fuzzy search
 Plug 'tpope/vim-commentary'                 " Comment out
 Plug 'tpope/vim-surround'                   " Surround with s
 Plug 'Raimondi/delimitMate'                 " Auto close quotes, parenthesis, brackets, etc.
+Plug 'w0rp/ale'                             " Lint engine
 " }}}
 
 " Git {{{
@@ -35,6 +36,10 @@ Plug 'roxma/nvim-completion-manager'
 
     " Snippets are separated from the engine. Add this if you want them:
     Plug 'honza/vim-snippets'
+" }}}
+
+" Python {{{
+Plug 'davidhalter/jedi-vim'
 " }}}
 
 call plug#end()
@@ -89,6 +94,28 @@ inoremap <C-F>t <Esc>:CtrlSFToggle<CR>
     let g:UltiSnipsExpandTrigger="<C-U>"
     let g:UltiSnipsJumpForwardTrigger="<c-b>"
     let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+" }}}
+
+" Python {{{
+    " turn off completion
+    let g:jedi#completions_enabled = 0
+
+    let g:jedi#goto_command = "<leader>d"
+    let g:jedi#goto_assignments_command = "<leader>g"
+    let g:jedi#documentation_command = "K"
+    let g:jedi#usages_command = "<leader>n"
+    let g:jedi#rename_command = "<leader>r"
+" }}}
+
+" ALE {{{
+let g:ale_fixers = {
+            \   'python': [
+            \       'trim_whitespace',
+            \       'remove_trailing_lines',
+            \       'isort',
+            \       'yapf'
+            \   ],
+            \}
 " }}}
 
 " }}}
