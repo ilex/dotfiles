@@ -225,6 +225,8 @@ set foldlevelstart=10    " start with fold level of 1
 set spelllang=en                " spell checking language
 set spellfile=$HOME/.vim/spell/en.utf-8.add     " file to add new words for spell checking
 set spell                       " turn on spell checking
+hi clear SpellBad
+hi SpellBad cterm=underline
 " }}}
 
 " }}}
