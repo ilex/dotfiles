@@ -40,6 +40,7 @@ call plug#begin()
 " }}}
 
 " Python {{{
+    Plug 'lambdalisue/vim-pyenv'
     Plug 'davidhalter/jedi-vim'
     " Plug 'dbsr/vimpy'                           " automatic imports
 " }}}
@@ -96,7 +97,7 @@ inoremap <C-F>t <Esc>:CtrlSFToggle<CR>
 " }}}
 
 " Snippets {{{
-    let g:UltiSnipsExpandTrigger="<C-U>"
+    let g:UltiSnipsExpandTrigger="<C-e>"
     let g:UltiSnipsJumpForwardTrigger="<c-b>"
     let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 " }}}
@@ -124,6 +125,10 @@ let g:ale_fixers = {
             \       'yapf'
             \   ],
             \}
+let g:ale_linters = {
+            \ 'python': ['flake8']
+            \}
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 " }}}
 
 " }}}
@@ -171,6 +176,8 @@ nnoremap <leader>f :CtrlSF
 " }}}
 
 " Settings {{{
+    
+   set clipboard=unnamed,unnamedplus 
 
 " Colors {{{
 syntax enable           " enable syntax processing
