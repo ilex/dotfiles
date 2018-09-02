@@ -1,5 +1,11 @@
 set nocompatible
 
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
 " Plugins {{{
 call plug#begin()
 
@@ -35,14 +41,18 @@ call plug#begin()
 " }}}
 
 " Snippets {{{
-    Plug 'SirVer/ultisnips'
-    Plug 'honza/vim-snippets'
+    " Plug 'SirVer/ultisnips'
+    " Plug 'honza/vim-snippets'
 " }}}
 
 " Python {{{
     Plug 'lambdalisue/vim-pyenv'
     Plug 'davidhalter/jedi-vim'
     " Plug 'dbsr/vimpy'                           " automatic imports
+" }}}
+
+" Jinja2 {{{
+    Plug 'Glench/Vim-Jinja2-Syntax'
 " }}}
 
 call plug#end()
@@ -72,7 +82,7 @@ call plug#end()
 " }}}
 
 " CtrlSF {{{
-let g:ctrlsf_ackprg = '/usr/local/bin/ag'
+let g:ctrlsf_ackprg = '/usr/bin/ag'
 nmap     <C-F>f <Plug>CtrlSFPrompt
 vmap     <C-F>f <Plug>CtrlSFVwordPath
 vmap     <C-F>F <Plug>CtrlSFVwordExec
@@ -203,7 +213,7 @@ set autoindent
 " UI Layout {{{
 set number              " show line numbers
 set showcmd             " show command in bottom bar
-set cursorline          " highlight current line
+" set cursorline          " highlight current line
 set showmatch           " highlight matching parenthesis
 set scrolloff=3         " when scrolling, keep cursor 3 lines away from screen border
 set wildmenu              " autocompletion of files and commands behaves like shell
@@ -253,21 +263,21 @@ augroup END
 "     autocmd FileType python map <silent> <leader>b oimport pdb; pdb.set_trace()<esc>
 " augroup END
 
-" augroup jinja2_group
-"     autocmd!
-"     autocmd BufNewFile,BufRead *.html,*.jinja2 setlocal filetype=jinja
-"     autocmd FileType jinja setlocal autoindent smartindent ts=2 sts=2 sw=2 expandtab
-" augroup END
+augroup jinja2_group
+    autocmd!
+    autocmd BufNewFile,BufRead *.html,*.jinja2 setlocal filetype=jinja
+    autocmd FileType jinja setlocal autoindent smartindent ts=2 sts=2 sw=2 expandtab
+augroup END
 
-" augroup yaml_group
-"     autocmd!
-"     autocmd FileType yaml setlocal autoindent smartindent ts=2 sts=2 sw=2 expandtab
-" augroup END
+augroup yaml_group
+    autocmd!
+    autocmd FileType yaml setlocal autoindent smartindent ts=2 sts=2 sw=2 expandtab
+augroup END
 
-" augroup sass_group
-"     autocmd!
-"     autocmd FileType scss setlocal autoindent smartindent ts=2 sts=2 sw=2 expandtab
-" augroup END
+augroup sass_group
+    autocmd!
+    autocmd FileType scss setlocal autoindent smartindent ts=2 sts=2 sw=2 expandtab
+augroup END
 
 " }}}
 
