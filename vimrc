@@ -25,7 +25,8 @@ call plug#begin()
     Plug 'Raimondi/delimitMate'                 " Auto close quotes, parenthesis, brackets, etc.
     Plug 'w0rp/ale'                             " Lint engine
     " Plug 'mbbill/undotree'                      " local file changes history
-    " Plug 'Konfekt/FastFold'                     
+    Plug 'Konfekt/FastFold'                     " Update fold only on events 
+    Plug 'easymotion/vim-easymotion'            " Easy motion
 " }}}
 
 " Git {{{
@@ -35,24 +36,69 @@ call plug#begin()
     Plug 'junegunn/gv.vim'                      " Commit browser with GV command
 " }}}
 
-" Autocomplete {{{
-    " Plug 'roxma/nvim-completion-manager'
-    Plug 'maralla/completor.vim'
+" Snippets {{{
+    Plug 'SirVer/ultisnips'
+    Plug 'honza/vim-snippets'
+    
+    " c-j c-k for moving in snippet
+    smap <c-u> <Plug>(ultisnips_expand)
+    let g:UltiSnipsExpandTrigger		= "<Plug>(ultisnips_expand)"
+    let g:UltiSnipsJumpForwardTrigger	= "<c-j>"
+    let g:UltiSnipsJumpBackwardTrigger	= "<c-k>"
+    let g:UltiSnipsRemoveSelectModeMappings = 0
+
 " }}}
 
-" Snippets {{{
-    " Plug 'SirVer/ultisnips'
-    " Plug 'honza/vim-snippets'
+" Autocomplete {{{
+    " Plug 'maralla/completor.vim'
+    " Plug 'asyncomplete'
+
+    " NCM2 {{{
+        Plug 'roxma/vim-hug-neovim-rpc'
+        Plug 'ncm2/ncm2'
+        Plug 'roxma/nvim-yarp'
+
+        " Highlight match in results
+        Plug 'ncm2/ncm2-match-highlight'
+
+        " Sources
+        Plug 'ncm2/ncm2-bufword'
+        Plug 'ncm2/ncm2-path'
+        Plug 'ncm2/ncm2-ultisnips'
+
+        " enable ncm2 for all buffers
+        autocmd BufEnter * call ncm2#enable_for_buffer()
+
+        " Use tab to navigate through results
+        inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+        inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+        " expand snippets
+        inoremap <silent> <expr> <CR> ((pumvisible() && empty(v:completed_item)) ?  "\<c-y>\<cr>" : (!empty(v:completed_item) ? ncm2_ultisnips#expand_or("", 'n') : "\<CR>" ))
+        imap <expr> <c-u> ncm2_ultisnips#expand_or("\<Plug>(ultisnips_expand)", 'm')
+    " }}}
+
+    " show menu for one result, do not select result item, do not insert
+    " result item into text
+    set completeopt=noinsert,menuone,noselect
+
+    " don't show completion messages
+    set shortmess+=c
 " }}}
 
 " Python {{{
     Plug 'lambdalisue/vim-pyenv'
     Plug 'davidhalter/jedi-vim'
     " Plug 'dbsr/vimpy'                           " automatic imports
+    Plug 'tmhedberg/SimpylFold'                 " Fold python code
 " }}}
 
 " Jinja2 {{{
     Plug 'Glench/Vim-Jinja2-Syntax'
+" }}}
+
+" Html {{{
+    Plug 'alvan/vim-closetag'                   " Auto close tags in html
 " }}}
 
 call plug#end()
@@ -93,23 +139,10 @@ nnoremap <C-F>t :CtrlSFToggle<CR>
 inoremap <C-F>t <Esc>:CtrlSFToggle<CR>
 " }}}
 
-" Autocomlete {{{
-    " don't show completion messages
-    set shortmess+=c
-    " Use tab to navigate through results
-    inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-    " " Expand snippets on Enter (they should be expanded with ctrl-U)
-    " imap <expr> <CR>  (pumvisible() ?  "\<c-y>\<Plug>(expand_or_nl)" : "\<CR>")
-    " imap <expr> <Plug>(expand_or_nl) (cm#completed_is_snippet() ? "\<C-U>":"\<CR>")
-    inoremap <expr> <cr> pumvisible() ? "\<C-y>\<cr>" : "\<cr>"
-    " let g:completor_python_binary = '/home/ilex/.pyenv/shims/python'
-" }}}
-
 " Snippets {{{
-    let g:UltiSnipsExpandTrigger="<C-e>"
-    let g:UltiSnipsJumpForwardTrigger="<c-b>"
-    let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+    " let g:UltiSnipsExpandTrigger="<C-e>"
+    " let g:UltiSnipsJumpForwardTrigger="<c-b>"
+    " let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 " }}}
 
 " Python {{{
@@ -168,7 +201,7 @@ let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 " Leader Shortcuts {{{
 let mapleader=","
 " paste from external buffer
-map <Leader>p "*p
+map <Leader>p "+p
 " save file
 map <leader>w :w<CR>
 " quit file

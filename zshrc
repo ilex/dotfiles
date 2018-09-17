@@ -99,6 +99,10 @@ export PATH="~/.pyenv/bin:$PATH"
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 
+# vim as default editor
+export VISUAL=vim
+export EDITOR="$VISUAL"
+
 fancy-ctrl-z () {
   if [[ $#BUFFER -eq 0 ]]; then
     BUFFER="fg"
