@@ -103,6 +103,9 @@ eval "$(pyenv virtualenv-init -)"
 export VISUAL=vim
 export EDITOR="$VISUAL"
 
+# go
+export PATH=$PATH:/usr/local/go/bin
+
 fancy-ctrl-z () {
   if [[ $#BUFFER -eq 0 ]]; then
     BUFFER="fg"
