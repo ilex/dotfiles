@@ -65,6 +65,7 @@ call plug#begin()
         Plug 'ncm2/ncm2-bufword'
         Plug 'ncm2/ncm2-path'
         Plug 'ncm2/ncm2-ultisnips'
+        Plug 'filipekiss/ncm2-look.vim'
 
         " enable ncm2 for all buffers
         autocmd BufEnter * call ncm2#enable_for_buffer()
@@ -99,6 +100,12 @@ call plug#begin()
 
 " Html {{{
     Plug 'alvan/vim-closetag'                   " Auto close tags in html
+    Plug 'othree/html5.vim'                     " Syntax
+" }}}
+
+" TypeScript {{{
+    Plug 'HerringtonDarkholme/yats.vim'
+    " Plug 'leafgarland/typescript-vim'
 " }}}
 
 call plug#end()
