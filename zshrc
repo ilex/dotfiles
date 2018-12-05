@@ -51,7 +51,7 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git git-flow pyenv pip python pylint redis-cli command-not-found autojump httpie sudo)
+plugins=(git git-flow pyenv pip python pylint redis-cli command-not-found autojump sudo ng)
 
 source $ZSH/oh-my-zsh.sh
 

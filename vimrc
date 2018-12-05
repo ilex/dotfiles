@@ -92,6 +92,7 @@ call plug#begin()
     Plug 'davidhalter/jedi-vim'
     " Plug 'dbsr/vimpy'                           " automatic imports
     Plug 'tmhedberg/SimpylFold'                 " Fold python code
+    Plug 'vim-scripts/indentpython.vim'
 " }}}
 
 " Jinja2 {{{
@@ -297,11 +298,19 @@ augroup config_group
     autocmd BufWritePre *.py,*.php,*.js,*.txt,*.hs,*.java,*.md,*.rb,*.css,*.jinja2,*.html :call <SID>StripTrailingWhitespaces()
 augroup END
 
-" augroup python_group
-"     autocmd!
-"     autocmd FileType python setlocal signcolumn=yes
-"     autocmd FileType python map <silent> <leader>b oimport pdb; pdb.set_trace()<esc>
-" augroup END
+augroup python_group
+    autocmd!
+    autocmd FileType python setlocal signcolumn=yes
+    autocmd FileType python map <silent> <leader>b oimport pdb; pdb.set_trace()<esc>
+    autocmd FileType python  setlocal
+                \ tabstop=4
+                \ softtabstop=4
+                \ shiftwidth=4
+                \ textwidth=79
+                \ expandtab
+                \ autoindent
+                \ fileformat=unix
+augroup END
 
 augroup jinja2_group
     autocmd!
@@ -317,6 +326,11 @@ augroup END
 augroup sass_group
     autocmd!
     autocmd FileType scss setlocal autoindent smartindent ts=2 sts=2 sw=2 expandtab
+augroup END
+
+augroup html
+    autocmd!
+    autocmd FileType html setlocal foldmethod=syntax ts=2 sts=2 sw=2 expandtab
 augroup END
 
 " }}}
